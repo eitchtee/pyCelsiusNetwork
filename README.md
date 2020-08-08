@@ -1,2 +1,2 @@
 # pyCelsiusNetwork
-Python's Unofficial Wrapper for CelciusNetwork API
+Unofficial Python Wrapper for the Celcius Network API
