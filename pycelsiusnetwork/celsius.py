@@ -17,8 +17,6 @@ class CelsiusNetwork:
 
         response = requests.request("GET", url, headers=headers)
 
-        print(response.status_code)
-
         if not response.ok:
             raise CelsiusNetworkHTTPError(response)
 
