@@ -6,7 +6,7 @@ with open("README-pypi.md", "r", encoding='utf-8') as fh:
 setuptools.setup(
     name="pycelsiusnetwork",
     packages=['pycelsiusnetwork'],
-    version="0.1.1",
+    version="0.2.0",
     license='MIT',
     author="Herculino Trotta Neto",
     author_email="herculinotrotta@gmail.com",
