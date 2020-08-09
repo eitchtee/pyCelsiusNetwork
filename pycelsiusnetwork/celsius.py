@@ -188,3 +188,34 @@ class CelsiusNetwork:
             return result
         else:
             return response.json().get('record')
+
+    def get_deposit_adress_for_coin(self,
+                                    coin: str,
+                                    raw: bool = False,
+                                    silent: bool = None):
+
+        coin = str(coin).upper()
+        silent = silent if silent is not None else self.silent
+
+        url = f"{self._base_url}" \
+              "/wallet" \
+              f"/{coin}" \
+              "/deposit"
+
+        headers = {
+            'X-Cel-Partner-Token': self._token,
+            'X-Cel-Api-Key': self._key
+        }
+
+        response = requests.request("GET", url, headers=headers)
+
+        if not response.ok:
+            if (self.silent and silent) or silent:
+                return None
+            else:
+                raise CelsiusNetworkHTTPError(response)
+
+        if raw:
+            return response.json()
+        else:
+            return response.json().get('address')
