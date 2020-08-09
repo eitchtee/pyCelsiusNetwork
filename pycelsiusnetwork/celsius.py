@@ -6,10 +6,19 @@ class CelsiusNetwork:
     def __init__(self,
                  partner_token: str,
                  api_key: str,
+                 enviroment: str = 'PRODUCTION',
                  silent: bool = False):
 
-        self.token = str(partner_token)
-        self.key = str(api_key)
+        self._token = str(partner_token)
+        self._key = str(api_key)
+
+        if str(enviroment).upper() == 'PRODUCTION':
+            self._base_url = "https://wallet-api.celsius.network"
+        elif str(enviroment).upper() == 'STAGING':
+            self._base_url = "https://wallet-api.staging.celsius.network"
+        else:
+            self._base_url = "https://wallet-api.celsius.network"
+
         self.silent = silent
 
     def get_wallet_balance(self,
@@ -18,13 +27,13 @@ class CelsiusNetwork:
 
         silent = silent if silent is not None else self.silent
 
-        url = "https://wallet-api.celsius.network" \
+        url = f"{self._base_url}" \
               "/wallet" \
               "/balance"
 
         headers = {
-            'X-Cel-Partner-Token': self.token,
-            'X-Cel-Api-Key': self.key
+            'X-Cel-Partner-Token': self._token,
+            'X-Cel-Api-Key': self._key
         }
 
         response = requests.request("GET", url, headers=headers)
@@ -48,14 +57,14 @@ class CelsiusNetwork:
         coin = str(coin).upper()
         silent = silent if silent is not None else self.silent
 
-        url = f"https://wallet-api.celsius.network" \
+        url = f"{self._base_url}" \
               f"/wallet" \
               f"/{coin}" \
               f"/balance"
 
         headers = {
-            'X-Cel-Partner-Token': self.token,
-            'X-Cel-Api-Key': self.key
+            'X-Cel-Partner-Token': self._token,
+            'X-Cel-Api-Key': self._key
         }
 
         response = requests.request("GET", url, headers=headers)
@@ -83,13 +92,13 @@ class CelsiusNetwork:
         per_page = kwargs.get('per_page') or 100
         silent = silent if silent is not None else self.silent
 
-        url = f"https://wallet-api.celsius.network" \
+        url = f"{self._base_url}" \
               f"/wallet" \
               f"/transactions?page={page}&per_page={per_page}"
 
         headers = {
-            'X-Cel-Partner-Token': self.token,
-            'X-Cel-Api-Key': self.key}
+            'X-Cel-Partner-Token': self._token,
+            'X-Cel-Api-Key': self._key}
 
         response = requests.request("GET", url, headers=headers)
 
