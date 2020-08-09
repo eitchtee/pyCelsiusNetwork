@@ -57,6 +57,7 @@ class CelsiusNetwork:
                    response.json().get('amount_in_usd'),
 
     def get_transactions(self,
+                         depaginate: bool = True,
                          reverse: bool = False,
                          raw: bool = False,
                          **kwargs):
@@ -79,7 +80,8 @@ class CelsiusNetwork:
 
         if raw:
             return response.json()
-        else:
+        elif depaginate:
+            # Depaginate results and return then as one list
             result = []
             result += response.json().get('record') or []
 
@@ -99,3 +101,5 @@ class CelsiusNetwork:
                 result.reverse()
 
             return result
+        else:
+            return response.json().get('record')
