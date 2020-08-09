@@ -3,7 +3,11 @@ from .exceptions import CelsiusNetworkHTTPError
 
 
 class CelsiusNetwork:
-    def __init__(self, partner_token: str, api_key: str):
+    def __init__(self,
+                 partner_token: str,
+                 api_key: str,
+                 silent: bool = False):
+
         self.token = str(partner_token)
         self.key = str(api_key)
 
