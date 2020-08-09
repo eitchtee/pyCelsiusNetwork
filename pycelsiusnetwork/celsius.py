@@ -8,7 +8,9 @@ class CelsiusNetwork:
         self.key = str(api_key)
 
     def get_wallet_balance(self, raw: bool = False):
-        url = "https://wallet-api.celsius.network/wallet/balance"
+        url = "https://wallet-api.celsius.network" \
+              "/wallet" \
+              "/balance"
 
         headers = {
             'X-Cel-Partner-Token': self.token,
@@ -28,7 +30,10 @@ class CelsiusNetwork:
     def get_coin_balance(self, coin: str, raw: bool = False):
         coin = str(coin).upper()
 
-        url = f"https://wallet-api.celsius.network/wallet/{coin}/balance"
+        url = f"https://wallet-api.celsius.network" \
+              f"/wallet" \
+              f"/{coin}" \
+              f"/balance"
 
         headers = {
             'X-Cel-Partner-Token': self.token,
@@ -49,8 +54,9 @@ class CelsiusNetwork:
     def get_transactions(self, raw: bool = False, **kwargs):
         page = kwargs.get('page') or 1
         per_page = kwargs.get('per_page') or 100
-        url = f"https://wallet-api.celsius.network/" \
-              f"wallet/transactions?page={page}&per_page={per_page}"
+        url = f"https://wallet-api.celsius.network" \
+              f"/wallet" \
+              f"/transactions?page={page}&per_page={per_page}"
 
         headers = {
             'X-Cel-Partner-Token': self.token,
