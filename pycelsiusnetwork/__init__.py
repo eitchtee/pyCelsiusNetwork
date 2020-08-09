@@ -1,1 +1,2 @@
-from pycelsiusnetwork.wrapper import CelsiusNetwork
+from .celsius import CelsiusNetwork
+from .exceptions import CelsiusNetworkHTTPError
