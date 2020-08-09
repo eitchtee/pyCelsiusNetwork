@@ -51,9 +51,14 @@ class CelsiusNetwork:
             return response.json().get('amount'),\
                    response.json().get('amount_in_usd'),
 
-    def get_transactions(self, raw: bool = False, **kwargs):
+    def get_transactions(self,
+                         reverse: bool = False,
+                         raw: bool = False,
+                         **kwargs):
+
         page = kwargs.get('page') or 1
         per_page = kwargs.get('per_page') or 100
+
         url = f"https://wallet-api.celsius.network" \
               f"/wallet" \
               f"/transactions?page={page}&per_page={per_page}"
@@ -71,7 +76,7 @@ class CelsiusNetwork:
             return response.json()
         else:
             result = []
-            result += response.json().get('record')
+            result += response.json().get('record') or []
 
             pagination = response.json().get('pagination')
             if pagination['pages'] > page:
@@ -83,6 +88,9 @@ class CelsiusNetwork:
                           f"/transactions?page={next_page}&per_page={per_page}"
                     response = requests.request("GET", url, headers=headers)
 
-                    result += response.json().get('record')
+                    result += response.json().get('record') or []
+
+            if reverse:
+                result.reverse()
 
             return result
