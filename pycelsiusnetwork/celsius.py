@@ -78,7 +78,7 @@ class CelsiusNetwork:
         if raw:
             return response.json()
         else:
-            return response.json().get('amount'),\
+            return response.json().get('amount'), \
                    response.json().get('amount_in_usd'),
 
     def get_transactions(self,
@@ -119,9 +119,64 @@ class CelsiusNetwork:
             if pagination['pages'] > page:
                 for next_page in range(
                         pagination['current'] + 1, pagination['pages'] + 1):
-
                     url = f"https://wallet-api.celsius.network" \
                           f"/wallet" \
+                          f"/transactions?page={next_page}&per_page={per_page}"
+                    response = requests.request("GET", url, headers=headers)
+
+                    result += response.json().get('record') or []
+
+            if reverse:
+                result.reverse()
+
+            return result
+        else:
+            return response.json().get('record')
+
+    def get_transactions_for_coin(self,
+                                  coin: str,
+                                  depaginate: bool = True,
+                                  reverse: bool = False,
+                                  raw: bool = False,
+                                  silent: bool = None,
+                                  **kwargs):
+
+        coin = str(coin).upper()
+        page = kwargs.get('page') or 1
+        per_page = kwargs.get('per_page') or 100
+        silent = silent if silent is not None else self.silent
+
+        url = f"{self._base_url}" \
+              f"/wallet" \
+              f"/{coin}" \
+              f"/transactions?page={page}&per_page={per_page}"
+
+        headers = {
+            'X-Cel-Partner-Token': self._token,
+            'X-Cel-Api-Key': self._key}
+
+        response = requests.request("GET", url, headers=headers)
+
+        if not response.ok:
+            if (self.silent and silent) or silent:
+                return None
+            else:
+                raise CelsiusNetworkHTTPError(response)
+
+        if raw:
+            return response.json()
+        elif depaginate:
+            # Depaginate results and return then as one list
+            result = []
+            result += response.json().get('record') or []
+
+            pagination = response.json().get('pagination')
+            if pagination['pages'] > page:
+                for next_page in range(
+                        pagination['current'] + 1, pagination['pages'] + 1):
+                    url = f"https://wallet-api.celsius.network" \
+                          f"/wallet" \
+                          f"/{coin}" \
                           f"/transactions?page={next_page}&per_page={per_page}"
                     response = requests.request("GET", url, headers=headers)
 
