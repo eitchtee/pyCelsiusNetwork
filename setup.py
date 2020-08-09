@@ -4,8 +4,8 @@ with open("README-pypi.md", "r", encoding='utf-8') as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="pycelsiusnetowrk",
-    packages=['pycelsiusnetowrk'],
+    name="pycelsiusnetwork",
+    packages=['pycelsiusnetwork'],
     version="0.1.0",
     license='MIT',
     author="Herculino Trotta Neto",
