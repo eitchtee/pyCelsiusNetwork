@@ -12,7 +12,12 @@ class CelsiusNetwork:
         self.key = str(api_key)
         self.silent = silent
 
-    def get_wallet_balance(self, raw: bool = False):
+    def get_wallet_balance(self,
+                           raw: bool = False,
+                           silent: bool = None):
+
+        silent = silent if silent is not None else self.silent
+
         url = "https://wallet-api.celsius.network" \
               "/wallet" \
               "/balance"
@@ -25,15 +30,23 @@ class CelsiusNetwork:
         response = requests.request("GET", url, headers=headers)
 
         if not response.ok:
-            raise CelsiusNetworkHTTPError(response)
+            if (self.silent and silent) or silent:
+                return None
+            else:
+                raise CelsiusNetworkHTTPError(response)
 
         if raw:
             return response.json()
         else:
             return response.json().get('balance')
 
-    def get_coin_balance(self, coin: str, raw: bool = False):
+    def get_coin_balance(self,
+                         coin: str,
+                         raw: bool = False,
+                         silent: bool = None):
+
         coin = str(coin).upper()
+        silent = silent if silent is not None else self.silent
 
         url = f"https://wallet-api.celsius.network" \
               f"/wallet" \
@@ -48,7 +61,10 @@ class CelsiusNetwork:
         response = requests.request("GET", url, headers=headers)
 
         if not response.ok:
-            raise CelsiusNetworkHTTPError(response)
+            if (self.silent and silent) or silent:
+                return None
+            else:
+                raise CelsiusNetworkHTTPError(response)
 
         if raw:
             return response.json()
@@ -60,10 +76,12 @@ class CelsiusNetwork:
                          depaginate: bool = True,
                          reverse: bool = False,
                          raw: bool = False,
+                         silent: bool = None,
                          **kwargs):
 
         page = kwargs.get('page') or 1
         per_page = kwargs.get('per_page') or 100
+        silent = silent if silent is not None else self.silent
 
         url = f"https://wallet-api.celsius.network" \
               f"/wallet" \
@@ -76,7 +94,10 @@ class CelsiusNetwork:
         response = requests.request("GET", url, headers=headers)
 
         if not response.ok:
-            raise CelsiusNetworkHTTPError(response)
+            if (self.silent and silent) or silent:
+                return None
+            else:
+                raise CelsiusNetworkHTTPError(response)
 
         if raw:
             return response.json()
