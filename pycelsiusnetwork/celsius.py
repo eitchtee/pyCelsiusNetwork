@@ -70,11 +70,10 @@ class CelsiusNetwork:
         if raw:
             return response.json()
         else:
-            pagination = response.json().get('pagination')
-
             result = []
             result += response.json().get('record')
 
+            pagination = response.json().get('pagination')
             if pagination['pages'] > page:
                 for next_page in range(
                         pagination['current'] + 1, pagination['pages'] + 1):
@@ -82,7 +81,6 @@ class CelsiusNetwork:
                     url = f"https://wallet-api.celsius.network" \
                           f"/wallet" \
                           f"/transactions?page={next_page}&per_page={per_page}"
-
                     response = requests.request("GET", url, headers=headers)
 
                     result += response.json().get('record')
