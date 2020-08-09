@@ -10,6 +10,7 @@ class CelsiusNetwork:
 
         self.token = str(partner_token)
         self.key = str(api_key)
+        self.silent = silent
 
     def get_wallet_balance(self, raw: bool = False):
         url = "https://wallet-api.celsius.network" \
