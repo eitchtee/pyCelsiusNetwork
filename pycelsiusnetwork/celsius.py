@@ -9,15 +9,20 @@ class CelsiusNetwork:
                  enviroment: str = 'PRODUCTION',
                  silent: bool = False):
 
-        self._token = str(partner_token)
-        self._key = str(api_key)
+        self._token = partner_token
+        self._key = api_key
 
-        if str(enviroment).upper() == 'PRODUCTION':
+        if enviroment.upper() == 'PRODUCTION':
             self._base_url = "https://wallet-api.celsius.network"
-        elif str(enviroment).upper() == 'STAGING':
+        elif enviroment.upper() == 'STAGING':
             self._base_url = "https://wallet-api.staging.celsius.network"
         else:
             self._base_url = "https://wallet-api.celsius.network"
+
+        self.headers = {
+            'X-Cel-Partner-Token': self._token,
+            'X-Cel-Api-Key': self._key
+        }
 
         self.silent = silent
 
@@ -26,17 +31,13 @@ class CelsiusNetwork:
                            silent: bool = None):
 
         silent = silent if silent is not None else self.silent
+        get_key = 'balance'
 
         url = f"{self._base_url}" \
               "/wallet" \
               "/balance"
 
-        headers = {
-            'X-Cel-Partner-Token': self._token,
-            'X-Cel-Api-Key': self._key
-        }
-
-        response = requests.request("GET", url, headers=headers)
+        response = requests.request("GET", url, headers=self.headers)
 
         if not response.ok:
             if (self.silent and silent) or silent:
@@ -47,27 +48,26 @@ class CelsiusNetwork:
         if raw:
             return response.json()
         else:
-            return response.json().get('balance')
+            return response.json().get(get_key)
 
     def get_coin_balance(self,
                          coin: str,
+                         return_type: str = 'in_coin',
                          raw: bool = False,
                          silent: bool = None):
 
-        coin = str(coin).upper()
+        coin = coin.upper()
         silent = silent if silent is not None else self.silent
+        return_type = return_type.lower()
+
+        get_key = ['amount', 'amount_in_usd']
 
         url = f"{self._base_url}" \
               f"/wallet" \
               f"/{coin}" \
               f"/balance"
 
-        headers = {
-            'X-Cel-Partner-Token': self._token,
-            'X-Cel-Api-Key': self._key
-        }
-
-        response = requests.request("GET", url, headers=headers)
+        response = requests.request("GET", url, headers=self.headers)
 
         if not response.ok:
             if (self.silent and silent) or silent:
@@ -78,8 +78,16 @@ class CelsiusNetwork:
         if raw:
             return response.json()
         else:
-            return response.json().get('amount'), \
-                   response.json().get('amount_in_usd'),
+            if return_type == 'in_coin':
+                return response.json().get(get_key[0])
+            elif return_type == 'in_usd':
+                return response.json().get(get_key[1])
+            elif return_type == 'in_both':
+                return {'in_coin': response.json().get(get_key[0]),
+                        'in_usd': response.json().get(get_key[1])}
+            else:
+                return {'in_coin': response.json().get(get_key[0]),
+                        'in_usd': response.json().get(get_key[1])}
 
     def get_transactions(self,
                          depaginate: bool = True,
@@ -91,16 +99,13 @@ class CelsiusNetwork:
         page = kwargs.get('page') or 1
         per_page = kwargs.get('per_page') or 100
         silent = silent if silent is not None else self.silent
+        get_key = 'record'
 
         url = f"{self._base_url}" \
               f"/wallet" \
               f"/transactions?page={page}&per_page={per_page}"
 
-        headers = {
-            'X-Cel-Partner-Token': self._token,
-            'X-Cel-Api-Key': self._key}
-
-        response = requests.request("GET", url, headers=headers)
+        response = requests.request("GET", url, headers=self.headers)
 
         if not response.ok:
             if (self.silent and silent) or silent:
@@ -113,7 +118,7 @@ class CelsiusNetwork:
         elif depaginate:
             # Depaginate results and return then as one list
             result = []
-            result += response.json().get('record') or []
+            result += response.json().get(get_key) or []
 
             pagination = response.json().get('pagination')
             if pagination['pages'] > page:
@@ -122,16 +127,17 @@ class CelsiusNetwork:
                     url = f"https://wallet-api.celsius.network" \
                           f"/wallet" \
                           f"/transactions?page={next_page}&per_page={per_page}"
-                    response = requests.request("GET", url, headers=headers)
+                    response = requests.request("GET", url,
+                                                headers=self.headers)
 
-                    result += response.json().get('record') or []
+                    result += response.json().get(get_key) or []
 
             if reverse:
                 result.reverse()
 
             return result
         else:
-            return response.json().get('record')
+            return response.json().get(get_key)
 
     def get_transactions_for_coin(self,
                                   coin: str,
@@ -141,21 +147,18 @@ class CelsiusNetwork:
                                   silent: bool = None,
                                   **kwargs):
 
-        coin = str(coin).upper()
+        coin = coin.upper()
         page = kwargs.get('page') or 1
         per_page = kwargs.get('per_page') or 100
         silent = silent if silent is not None else self.silent
+        get_key = 'record'
 
         url = f"{self._base_url}" \
               f"/wallet" \
               f"/{coin}" \
               f"/transactions?page={page}&per_page={per_page}"
 
-        headers = {
-            'X-Cel-Partner-Token': self._token,
-            'X-Cel-Api-Key': self._key}
-
-        response = requests.request("GET", url, headers=headers)
+        response = requests.request("GET", url, headers=self.headers)
 
         if not response.ok:
             if (self.silent and silent) or silent:
@@ -168,7 +171,7 @@ class CelsiusNetwork:
         elif depaginate:
             # Depaginate results and return then as one list
             result = []
-            result += response.json().get('record') or []
+            result += response.json().get(get_key) or []
 
             pagination = response.json().get('pagination')
             if pagination['pages'] > page:
@@ -178,36 +181,33 @@ class CelsiusNetwork:
                           f"/wallet" \
                           f"/{coin}" \
                           f"/transactions?page={next_page}&per_page={per_page}"
-                    response = requests.request("GET", url, headers=headers)
+                    response = requests.request("GET", url,
+                                                headers=self.headers)
 
-                    result += response.json().get('record') or []
+                    result += response.json().get(get_key) or []
 
             if reverse:
                 result.reverse()
 
             return result
         else:
-            return response.json().get('record')
+            return response.json().get(get_key)
 
     def get_deposit_adress_for_coin(self,
                                     coin: str,
                                     raw: bool = False,
                                     silent: bool = None):
 
-        coin = str(coin).upper()
+        coin = coin.upper()
         silent = silent if silent is not None else self.silent
+        get_key = 'address'
 
         url = f"{self._base_url}" \
               "/wallet" \
               f"/{coin}" \
               "/deposit"
 
-        headers = {
-            'X-Cel-Partner-Token': self._token,
-            'X-Cel-Api-Key': self._key
-        }
-
-        response = requests.request("GET", url, headers=headers)
+        response = requests.request("GET", url, headers=self.headers)
 
         if not response.ok:
             if (self.silent and silent) or silent:
@@ -218,4 +218,4 @@ class CelsiusNetwork:
         if raw:
             return response.json()
         else:
-            return response.json().get('address')
+            return response.json().get(get_key)

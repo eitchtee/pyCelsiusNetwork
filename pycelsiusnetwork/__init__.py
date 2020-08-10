@@ -1,2 +1,2 @@
 from .celsius import CelsiusNetwork
-from .exceptions import CelsiusNetworkHTTPError
+from .exceptions import CelsiusNetworkHTTPError, AbstractionLayerFailure
