@@ -23,6 +23,7 @@
 
 <p align="center">
     <a href="#what-is-this">What is this?</a> |
+    <a href="#requirements">Requirements</a> |
     <a href="#installation">Installation</a> |
     <a href="#usage">Usage</a> |
     <a href="#roadmap">Roadmap</a> |
@@ -35,6 +36,12 @@
 ## What is this?
 **pyCelsiusNetwork** is a Python API Wrapper for [Celsius Network](https://celsius.network/) public API.
 This package also offers a short-and-sweet abstraction layer, with functions like depagination of API Results, reversing, and filtering, but the raw JSON response is always one paramether away.
+
+## Requirements
+You will need:
+ - a Omnibus Treasury Partner Token, you can read on how to get one [here](https://developers.celsius.network/omnibus-treasury.html).
+ - a Celsius Account API Key, you can read on how to generate one [here](https://developers.celsius.network/createAPIKey.html)
+ - a computer with ``Python 3.5+`` and ``pip`` installed
 
 ## Installation
 #### With ``pip``
