@@ -6,7 +6,7 @@ Unofficial Python Wrapper for the Celcius Network API
 ---
 
 ## What is this?
-**pyCelsiusNetowrk** is a Python API Wrapper for [Celsius Network](https://celsius.network/) public API.
+**pyCelsiusNetwork** is a Python API Wrapper for [Celsius Network](https://celsius.network/) public API.
 This package also offers a short-and-sweet abstraction layer, with functions like depagination of API Results, reversing, and filtering, but the raw JSON response is always one paramether away.
 
 ## Installation
