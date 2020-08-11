@@ -68,7 +68,7 @@ Come back later.
 - [x] <small>``GET``</small> Get deposit address
 - [ ] <small>``POST``</small> Withdraw
 - [ ] <small>``GET``</small> Get withdrawal transaction id
-- [ ] <small>``GET``</small> Interest Rates
+- [x] <small>``GET``</small> Interest Rates
 - [ ] <small>``GET`` ``POST``</small> KYC
 
 #### Abstraction Layer

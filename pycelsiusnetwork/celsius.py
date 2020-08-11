@@ -27,6 +27,39 @@ class CelsiusNetwork:
 
         self.silent = silent
 
+    def get_interest_rate(self,
+                          coin: str = None,
+                          raw: bool = False,
+                          silent: bool = None):
+
+        silent = silent if silent is not None else self.silent
+        coin = coin.upper() if coin else None
+
+        url = f"{self._base_url}" \
+              "/util" \
+              "/interest" \
+              "/rates"
+
+        response = requests.request("GET", url)
+
+        if silent and not response.ok:
+            return None
+        elif not silent and not response.ok:
+            raise CelsiusNetworkHTTPError(response)
+
+        json = response.json()
+
+        if raw:
+            return json
+        else:
+            rates = get_key(key='interestRates', json=json, silent=silent)
+            rates_list = [{'coin': x['coin'], 'rate': x['rate']} for x in rates]
+            rates_dict = {item.pop("coin"): item['rate'] for item in rates_list}
+            if coin:
+                return rates_dict[coin]
+            else:
+                return rates_dict
+
     def get_wallet_balance(self,
                            raw: bool = False,
                            silent: bool = None):
