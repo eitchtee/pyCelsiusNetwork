@@ -1,5 +1,6 @@
 import requests
 from .exceptions import AbstractionFailure, CelsiusNetworkHTTPError
+from .utils import get_key
 
 
 class CelsiusNetwork:
@@ -48,15 +49,7 @@ class CelsiusNetwork:
         if raw:
             return json
         else:
-            try:
-                fetch_balance = json['balance']
-            except KeyError:
-                if (self.silent and silent) or silent:
-                    return None
-                else:
-                    raise AbstractionFailure(json=json)
-            else:
-                return fetch_balance
+            return get_key(key='balance', json=json, silent=silent)
 
     def get_coin_balance(self,
                          coin: str,
@@ -82,25 +75,21 @@ class CelsiusNetwork:
                 raise CelsiusNetworkHTTPError(response)
 
         json = response.json()
+
         if raw:
             return json
         else:
-            try:
-                fetch_in_coin = json['amount']
-                fetch_in_usd = json['amount_in_usd']
-            except KeyError:
-                if (self.silent and silent) or silent:
-                    return None
-                else:
-                    raise AbstractionFailure(json=json)
-            else:
-                if return_type == 'in_coin':
-                    return fetch_in_coin
-                elif return_type == 'in_usd':
-                    return fetch_in_usd
-                elif return_type == 'both':
-                    return {'in_coin': fetch_in_coin,
-                            'in_usd': fetch_in_usd}
+            if return_type == 'in_coin':
+                in_coin = get_key(key='amount', json=json, silent=silent)
+                return in_coin
+            elif return_type == 'in_usd':
+                in_usd = get_key(key='amount_in_usd', json=json, silent=silent)
+                return in_usd
+            elif return_type == 'both':
+                in_coin = get_key(key='amount', json=json, silent=silent)
+                in_usd = get_key(key='amount_in_usd', json=json, silent=silent)
+                return {'in_coin': in_coin,
+                        'in_usd': in_usd}
 
     def get_transactions(self,
                          depaginate: bool = True,
@@ -126,6 +115,7 @@ class CelsiusNetwork:
                 raise CelsiusNetworkHTTPError(response)
 
         json = response.json()
+
         if raw:
             return json
         elif depaginate:
@@ -158,15 +148,7 @@ class CelsiusNetwork:
             return result
 
         else:
-            try:
-                fetch_record = json['record']
-            except KeyError:
-                if (self.silent and silent) or silent:
-                    return None
-                else:
-                    raise AbstractionFailure(json=json)
-            else:
-                return fetch_record
+            return get_key(key='record', json=json, silent=silent)
 
     def get_transactions_for_coin(self,
                                   coin: str,
@@ -228,15 +210,7 @@ class CelsiusNetwork:
             return result
 
         else:
-            try:
-                fetch_record = json['record']
-            except KeyError:
-                if (self.silent and silent) or silent:
-                    return None
-                else:
-                    raise AbstractionFailure(json=json)
-            else:
-                return fetch_record
+            return get_key(key='record', json=json, silent=silent)
 
     def get_deposit_adress_for_coin(self,
                                     coin: str,
@@ -260,15 +234,8 @@ class CelsiusNetwork:
                 raise CelsiusNetworkHTTPError(response)
 
         json = response.json()
+
         if raw:
             return json
         else:
-            try:
-                fetch_address = json['address']
-            except KeyError:
-                if (self.silent and silent) or silent:
-                    return None
-                else:
-                    raise AbstractionFailure(json=json)
-            else:
-                return fetch_address
+            return get_key(key='address', json=json, silent=silent)
