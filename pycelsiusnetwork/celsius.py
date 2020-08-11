@@ -1,5 +1,5 @@
 import requests
-from .exceptions import CelsiusNetworkHTTPError
+from .exceptions import AbstractionFailure, CelsiusNetworkHTTPError
 
 
 class CelsiusNetwork:
@@ -31,7 +31,6 @@ class CelsiusNetwork:
                            silent: bool = None):
 
         silent = silent if silent is not None else self.silent
-        get_key = 'balance'
 
         url = f"{self._base_url}" \
               "/wallet" \
@@ -45,10 +44,19 @@ class CelsiusNetwork:
             else:
                 raise CelsiusNetworkHTTPError(response)
 
+        json = response.json()
         if raw:
-            return response.json()
+            return json
         else:
-            return response.json().get(get_key)
+            try:
+                fetch_balance = json['balance']
+            except KeyError:
+                if (self.silent and silent) or silent:
+                    return None
+                else:
+                    raise AbstractionFailure(json=json)
+            else:
+                return fetch_balance
 
     def get_coin_balance(self,
                          coin: str,
@@ -59,8 +67,6 @@ class CelsiusNetwork:
         coin = coin.upper()
         silent = silent if silent is not None else self.silent
         return_type = return_type.lower()
-
-        get_key = ['amount', 'amount_in_usd']
 
         url = f"{self._base_url}" \
               f"/wallet" \
@@ -75,19 +81,26 @@ class CelsiusNetwork:
             else:
                 raise CelsiusNetworkHTTPError(response)
 
+        json = response.json()
         if raw:
-            return response.json()
+            return json
         else:
-            if return_type == 'in_coin':
-                return response.json().get(get_key[0])
-            elif return_type == 'in_usd':
-                return response.json().get(get_key[1])
-            elif return_type == 'in_both':
-                return {'in_coin': response.json().get(get_key[0]),
-                        'in_usd': response.json().get(get_key[1])}
+            try:
+                fetch_in_coin = json['amount']
+                fetch_in_usd = json['amount_in_usd']
+            except KeyError:
+                if (self.silent and silent) or silent:
+                    return None
+                else:
+                    raise AbstractionFailure(json=json)
             else:
-                return {'in_coin': response.json().get(get_key[0]),
-                        'in_usd': response.json().get(get_key[1])}
+                if return_type == 'in_coin':
+                    return fetch_in_coin
+                elif return_type == 'in_usd':
+                    return fetch_in_usd
+                elif return_type == 'both':
+                    return {'in_coin': fetch_in_coin,
+                            'in_usd': fetch_in_usd}
 
     def get_transactions(self,
                          depaginate: bool = True,
@@ -99,7 +112,6 @@ class CelsiusNetwork:
         page = kwargs.get('page') or 1
         per_page = kwargs.get('per_page') or 100
         silent = silent if silent is not None else self.silent
-        get_key = 'record'
 
         url = f"{self._base_url}" \
               f"/wallet" \
@@ -113,31 +125,48 @@ class CelsiusNetwork:
             else:
                 raise CelsiusNetworkHTTPError(response)
 
+        json = response.json()
         if raw:
-            return response.json()
+            return json
         elif depaginate:
             # Depaginate results and return then as one list
             result = []
-            result += response.json().get(get_key) or []
+            try:
+                result += json['record']
 
-            pagination = response.json().get('pagination')
-            if pagination['pages'] > page:
-                for next_page in range(
-                        pagination['current'] + 1, pagination['pages'] + 1):
-                    url = f"https://wallet-api.celsius.network" \
-                          f"/wallet" \
-                          f"/transactions?page={next_page}&per_page={per_page}"
-                    response = requests.request("GET", url,
-                                                headers=self.headers)
+                pagination = json['pagination']
+                if pagination['pages'] > page:
+                    for next_page in range(
+                            pagination['current'] + 1, pagination['pages'] + 1):
+                        url = f"{self._base_url}" \
+                              f"/wallet" \
+                              f"/transactions?page={next_page}&per_page={per_page}"
+                        response = requests.request("GET", url,
+                                                    headers=self.headers)
 
-                    result += response.json().get(get_key) or []
+                        json = response.json()
+                        result += json['record']
+            except KeyError:
+                if (self.silent and silent) or silent:
+                    return None
+                else:
+                    raise AbstractionFailure(json=json)
 
             if reverse:
                 result.reverse()
 
             return result
+
         else:
-            return response.json().get(get_key)
+            try:
+                fetch_record = json['record']
+            except KeyError:
+                if (self.silent and silent) or silent:
+                    return None
+                else:
+                    raise AbstractionFailure(json=json)
+            else:
+                return fetch_record
 
     def get_transactions_for_coin(self,
                                   coin: str,
@@ -151,7 +180,6 @@ class CelsiusNetwork:
         page = kwargs.get('page') or 1
         per_page = kwargs.get('per_page') or 100
         silent = silent if silent is not None else self.silent
-        get_key = 'record'
 
         url = f"{self._base_url}" \
               f"/wallet" \
@@ -166,32 +194,49 @@ class CelsiusNetwork:
             else:
                 raise CelsiusNetworkHTTPError(response)
 
+        json = response.json()
         if raw:
-            return response.json()
+            return json
         elif depaginate:
             # Depaginate results and return then as one list
             result = []
-            result += response.json().get(get_key) or []
+            try:
+                result += json['record']
 
-            pagination = response.json().get('pagination')
-            if pagination['pages'] > page:
-                for next_page in range(
-                        pagination['current'] + 1, pagination['pages'] + 1):
-                    url = f"https://wallet-api.celsius.network" \
-                          f"/wallet" \
-                          f"/{coin}" \
-                          f"/transactions?page={next_page}&per_page={per_page}"
-                    response = requests.request("GET", url,
-                                                headers=self.headers)
+                pagination = json['pagination']
+                if pagination['pages'] > page:
+                    for next_page in range(
+                            pagination['current'] + 1, pagination['pages'] + 1):
+                        url = f"{self._base_url}" \
+                              f"/wallet" \
+                              f"/transactions?page={next_page}&per_page=" \
+                              f"{per_page}"
+                        response = requests.request("GET", url,
+                                                    headers=self.headers)
 
-                    result += response.json().get(get_key) or []
+                        json = response.json()
+                        result += json['record']
+            except KeyError:
+                if (self.silent and silent) or silent:
+                    return None
+                else:
+                    raise AbstractionFailure(json=json)
 
             if reverse:
                 result.reverse()
 
             return result
+
         else:
-            return response.json().get(get_key)
+            try:
+                fetch_record = json['record']
+            except KeyError:
+                if (self.silent and silent) or silent:
+                    return None
+                else:
+                    raise AbstractionFailure(json=json)
+            else:
+                return fetch_record
 
     def get_deposit_adress_for_coin(self,
                                     coin: str,
@@ -200,7 +245,6 @@ class CelsiusNetwork:
 
         coin = coin.upper()
         silent = silent if silent is not None else self.silent
-        get_key = 'address'
 
         url = f"{self._base_url}" \
               "/wallet" \
@@ -215,7 +259,16 @@ class CelsiusNetwork:
             else:
                 raise CelsiusNetworkHTTPError(response)
 
+        json = response.json()
         if raw:
-            return response.json()
+            return json
         else:
-            return response.json().get(get_key)
+            try:
+                fetch_address = json['address']
+            except KeyError:
+                if (self.silent and silent) or silent:
+                    return None
+                else:
+                    raise AbstractionFailure(json=json)
+            else:
+                return fetch_address
