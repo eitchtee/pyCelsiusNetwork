@@ -11,6 +11,7 @@
   <img alt="PyPI - License" src="https://img.shields.io/pypi/l/pycelsiusnetwork?style=for-the-badge">
   <a href="https://pypi.org/project/pycelsiusnetwork/" target="_blank"><img alt="PyPI" src="https://img.shields.io/pypi/v/pycelsiusnetwork?style=for-the-badge"></a>
   <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/pycelsiusnetwork?style=for-the-badge">
+  <img alt="PyPI - Downloads" src="https://img.shields.io/badge/dynamic/json?style=for-the-badge&color=303f9f&maxAge=86400&label=downloads&query=$.total_downloads&url=https://api.pepy.tech/api/projects/pycelsiusnetwork">
 </div>
 
 <br/>
