@@ -6,15 +6,15 @@ class CelsiusNetwork:
     def __init__(self,
                  partner_token: str,
                  api_key: str,
-                 enviroment: str = 'PRODUCTION',
+                 enviroment: str = 'production',
                  silent: bool = False):
 
         self._token = partner_token
         self._key = api_key
 
-        if enviroment.upper() == 'PRODUCTION':
+        if enviroment.lower() == 'production':
             self._base_url = "https://wallet-api.celsius.network"
-        elif enviroment.upper() == 'STAGING':
+        elif enviroment.upper() == 'staging':
             self._base_url = "https://wallet-api.staging.celsius.network"
         else:
             self._base_url = "https://wallet-api.celsius.network"
