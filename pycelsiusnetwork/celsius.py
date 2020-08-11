@@ -53,8 +53,8 @@ class CelsiusNetwork:
 
     def get_coin_balance(self,
                          coin: str,
-                         return_type: str = 'in_coin',
                          raw: bool = False,
+                         return_type: str = 'in_coin',
                          silent: bool = None):
 
         coin = coin.upper()
@@ -92,9 +92,9 @@ class CelsiusNetwork:
                         'in_usd': in_usd}
 
     def get_transactions(self,
+                         raw: bool = False,
                          depaginate: bool = True,
                          reverse: bool = False,
-                         raw: bool = False,
                          silent: bool = None,
                          **kwargs):
 
@@ -152,9 +152,9 @@ class CelsiusNetwork:
 
     def get_transactions_for_coin(self,
                                   coin: str,
+                                  raw: bool = False,
                                   depaginate: bool = True,
                                   reverse: bool = False,
-                                  raw: bool = False,
                                   silent: bool = None,
                                   **kwargs):
 
