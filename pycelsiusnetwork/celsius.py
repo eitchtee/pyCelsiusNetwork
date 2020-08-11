@@ -39,11 +39,10 @@ class CelsiusNetwork:
 
         response = requests.request("GET", url, headers=self.headers)
 
-        if not response.ok:
-            if (self.silent and silent) or silent:
-                return None
-            else:
-                raise CelsiusNetworkHTTPError(response)
+        if silent and not response.ok:
+            return None
+        elif not silent and not response.ok:
+            raise CelsiusNetworkHTTPError(response)
 
         json = response.json()
         if raw:
@@ -68,11 +67,10 @@ class CelsiusNetwork:
 
         response = requests.request("GET", url, headers=self.headers)
 
-        if not response.ok:
-            if (self.silent and silent) or silent:
-                return None
-            else:
-                raise CelsiusNetworkHTTPError(response)
+        if silent and not response.ok:
+            return None
+        elif not silent and not response.ok:
+            raise CelsiusNetworkHTTPError(response)
 
         json = response.json()
 
@@ -108,11 +106,10 @@ class CelsiusNetwork:
 
         response = requests.request("GET", url, headers=self.headers)
 
-        if not response.ok:
-            if (self.silent and silent) or silent:
-                return None
-            else:
-                raise CelsiusNetworkHTTPError(response)
+        if silent and not response.ok:
+            return None
+        elif not silent and not response.ok:
+            raise CelsiusNetworkHTTPError(response)
 
         json = response.json()
 
@@ -170,11 +167,10 @@ class CelsiusNetwork:
 
         response = requests.request("GET", url, headers=self.headers)
 
-        if not response.ok:
-            if (self.silent and silent) or silent:
-                return None
-            else:
-                raise CelsiusNetworkHTTPError(response)
+        if silent and not response.ok:
+            return None
+        elif not silent and not response.ok:
+            raise CelsiusNetworkHTTPError(response)
 
         json = response.json()
         if raw:
@@ -227,11 +223,10 @@ class CelsiusNetwork:
 
         response = requests.request("GET", url, headers=self.headers)
 
-        if not response.ok:
-            if (self.silent and silent) or silent:
-                return None
-            else:
-                raise CelsiusNetworkHTTPError(response)
+        if silent and not response.ok:
+            return None
+        elif not silent and not response.ok:
+            raise CelsiusNetworkHTTPError(response)
 
         json = response.json()
 
