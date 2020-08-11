@@ -16,8 +16,9 @@ setuptools.setup(
     keywords=['Celsius Netowrk', 'api', 'wrapper'],
     url="https://github.com/eitchtee/pyCelsiusNetwork",
     install_requires=[
-          'requests',
-      ],
+        'requests',
+        'arrow'
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

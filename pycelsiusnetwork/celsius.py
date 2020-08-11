@@ -1,6 +1,6 @@
 import requests
 from .exceptions import AbstractionFailure, CelsiusNetworkHTTPError
-from .utils import get_key
+from .utils import get_key, filter_json
 
 
 class CelsiusNetwork:
@@ -133,6 +133,14 @@ class CelsiusNetwork:
         per_page = kwargs.get('per_page') or 100
         silent = silent if silent is not None else self.silent
 
+        # Filter options
+        dt_from = kwargs.get('dt_from')
+        dt_to = kwargs.get('dt_to')
+        amount_bigger_than = kwargs.get('amount_bigger_than')
+        amount_lower_than = kwargs.get('amount_lower_than')
+        state = kwargs.get('state')
+        nature = kwargs.get('nature')
+
         url = f"{self._base_url}" \
               f"/wallet" \
               f"/transactions?page={page}&per_page={per_page}"
@@ -175,7 +183,12 @@ class CelsiusNetwork:
             if reverse:
                 result.reverse()
 
-            return result
+            return filter_json(dt_from,
+                               dt_to,
+                               amount_bigger_than,
+                               amount_lower_than,
+                               state,
+                               nature)
 
         else:
             return get_key(key='record', json=json, silent=silent)
@@ -192,6 +205,14 @@ class CelsiusNetwork:
         page = kwargs.get('page') or 1
         per_page = kwargs.get('per_page') or 100
         silent = silent if silent is not None else self.silent
+
+        # Filter options
+        dt_from = kwargs.get('dt_from')
+        dt_to = kwargs.get('dt_to')
+        amount_bigger_than = kwargs.get('amount_bigger_than')
+        amount_lower_than = kwargs.get('amount_lower_than')
+        state = kwargs.get('state')
+        nature = kwargs.get('nature')
 
         url = f"{self._base_url}" \
               f"/wallet" \
@@ -236,7 +257,12 @@ class CelsiusNetwork:
             if reverse:
                 result.reverse()
 
-            return result
+            return filter_json(dt_from,
+                               dt_to,
+                               amount_bigger_than,
+                               amount_lower_than,
+                               state,
+                               nature)
 
         else:
             return get_key(key='record', json=json, silent=silent)

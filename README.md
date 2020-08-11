@@ -74,7 +74,7 @@ Come back later.
 #### Abstraction Layer
 - [x] Option for returning raw JSON
 - [x] Depagination for ``Transactions summary`` and ``Transactions for coin``
-- [ ] Filtering for ``Transactions summary`` and ``Transactions for coin``
+- [x] Filtering for ``Transactions summary`` and ``Transactions for coin``
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
