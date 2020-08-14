@@ -1,6 +1,6 @@
 import requests
 from .exceptions import AbstractionFailure, CelsiusNetworkHTTPError
-from .utils import get_key, filter_json
+from .utils import get_key, filter_transactions
 
 
 class CelsiusNetwork:
@@ -183,12 +183,12 @@ class CelsiusNetwork:
             if reverse:
                 result.reverse()
 
-            return filter_json(dt_from,
-                               dt_to,
-                               amount_bigger_than,
-                               amount_lower_than,
-                               state,
-                               nature)
+            return filter_transactions(dt_from,
+                                       dt_to,
+                                       amount_bigger_than,
+                                       amount_lower_than,
+                                       state,
+                                       nature)
 
         else:
             return get_key('record', json=json, silent=silent)
@@ -257,12 +257,12 @@ class CelsiusNetwork:
             if reverse:
                 result.reverse()
 
-            return filter_json(dt_from,
-                               dt_to,
-                               amount_bigger_than,
-                               amount_lower_than,
-                               state,
-                               nature)
+            return filter_transactions(dt_from,
+                                       dt_to,
+                                       amount_bigger_than,
+                                       amount_lower_than,
+                                       state,
+                                       nature)
 
         else:
             return get_key('record', json=json, silent=silent)
@@ -315,6 +315,6 @@ class CelsiusNetwork:
         if raw:
             return json
         elif coin:
-            return get_key('interest', coin, json=json, silent=silent)[coin]
+            return get_key('interest', coin, json=json, silent=silent)
         else:
             return get_key('interest', json=json, silent=silent)

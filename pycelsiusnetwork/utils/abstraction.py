@@ -17,13 +17,13 @@ def get_key(*keys, json: dict, silent: bool):
         return fetched_obj
 
 
-def filter_json(lst,
-                dt_from = None,
-                dt_to = None,
-                amount_bigger_than = None,
-                amount_lower_than = None,
-                state = None,
-                nature = None):
+def filter_transactions(lst,
+                        dt_from = None,
+                        dt_to = None,
+                        amount_bigger_than = None,
+                        amount_lower_than = None,
+                        state = None,
+                        nature = None):
 
     dt_from = convert_to_datetime(dt_from) if dt_from else None
     dt_to = convert_to_datetime(dt_to) if dt_to else None
