@@ -21,8 +21,58 @@ You will need:
 $ pip install pycelsiusnetwork
 ```
 
-## Usage
-Come back later.
+## Usage and Examples
+
+### Initialization
+```python
+api = CelsiusNetwork("PARTNER_TOKEN",
+                     "USER_API_KEY")
+```
+
+### Filtering transactions
+You don't neet to set all filtering options, only the ones you want.
+> dt_from and dt_to also accepts datetime objects.
+>
+```python
+filtered_transactions = api.get_transactions(dt_from="2020-01-01",
+                                             dt_to="2020-05-01",
+                                             state="confirmed",
+                                             nature="interest",
+                                             amount_lower_than=2,
+                                             amount_bigger_than=0.1)
+```
+
+### Silence errors
+By passing `silent=True` to any function or the API object itself, you can mute package exceptions, A.K.A. `AbstractionFailure` and `CelsiusNetworkHTTPError`, by doing so, `None` will be returned in the presence of an error instead of raising an Exception.
+
+```python
+api = CelsiusNetwork("PARTNER_TOKEN",
+                     "USER_API_KEY",
+                     silent=True)
+```
+
+or
+
+```python
+api.get_deposit_adress_for_coin('BTC', silent=True)
+```
+
+Also, if you pass ``silent=True`` to the API initialization, you can override it for any function by passing ``silent=False`` to it.
+
+```python
+api = CelsiusNetwork("PARTNER_TOKEN",
+                     "USER_API_KEY",
+                     silent=True)
+
+api.get_deposit_adress_for_coin('BTC', silent=False)
+```
+
+### Getting the raw response
+If you want to ignore the abstraction layer and get access to that juicy JSON directly, you can pass ``raw=True`` to any function, doing so, will make the function return the full response JSON.
+
+```python
+api.get_supported_coins(raw=True)
+```
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
