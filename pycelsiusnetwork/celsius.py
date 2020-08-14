@@ -292,4 +292,29 @@ class CelsiusNetwork:
         if raw:
             return json
         else:
-            return get_key(key='address', json=json, silent=silent)
+            return get_key('address', json=json, silent=silent)
+
+    def get_interest_summary(self,
+                             coin: str = None,
+                             raw: bool = False,
+                             silent: bool = None):
+
+        url = f"{self._base_url}" \
+              "/wallet" \
+              f"/interest"
+
+        response = requests.request("GET", url, headers=self.headers)
+
+        if silent and not response.ok:
+            return None
+        elif not silent and not response.ok:
+            raise CelsiusNetworkHTTPError(response)
+
+        json = response.json()
+
+        if raw:
+            return json
+        elif coin:
+            return get_key('interest', coin, json=json, silent=silent)[coin]
+        else:
+            return get_key('interest', json=json, silent=silent)
