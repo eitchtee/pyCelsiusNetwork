@@ -70,7 +70,8 @@ Come back later.
 - [ ] <small>``POST``</small> Withdraw
 - [ ] <small>``GET``</small> Get withdrawal transaction id
 - [x] <small>``GET``</small> Interest Rates
-- [ ] <small>``GET`` ``POST``</small> KYC
+- [x] <small>``GET``</small> KYC
+- [ ] <small>``POST``</small> KYC
 
 #### Abstraction Layer
 - [x] Option for returning raw JSON

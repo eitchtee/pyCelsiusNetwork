@@ -318,3 +318,23 @@ class CelsiusNetwork:
             return get_key('interest', coin, json=json, silent=silent)
         else:
             return get_key('interest', json=json, silent=silent)
+
+    def get_kyc_status(self,
+                       raw: bool = False,
+                       silent: bool = None):
+
+        url = f"{self._base_url}" \
+              "/kyc"
+        response = requests.request("GET", url, headers=self.headers)
+
+        if silent and not response.ok:
+            return None
+        elif not silent and not response.ok:
+            raise CelsiusNetworkHTTPError(response)
+
+        json = response.json()
+
+        if raw:
+            return json
+        else:
+            return get_key('status', json=json, silent=silent)
