@@ -338,3 +338,25 @@ class CelsiusNetwork:
             return json
         else:
             return get_key('status', json=json, silent=silent)
+
+    def get_supported_coins(self,
+                            raw: bool = False,
+                            silent: bool = None):
+
+        url = f"{self._base_url}" \
+              "/util" \
+              "/supported_currencies"
+        response = requests.request("GET", url, headers=self.headers)
+
+        if silent and not response.ok:
+            return None
+        elif not silent and not response.ok:
+            raise CelsiusNetworkHTTPError(response)
+
+        json = response.json()
+
+        if raw:
+            return json
+        else:
+            return get_key('currencies', json=json, silent=silent)
+
