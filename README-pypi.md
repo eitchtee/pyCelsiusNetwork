@@ -25,8 +25,11 @@ $ pip install pycelsiusnetwork
 
 ### Initialization
 ```python
+from pycelsiusnetwork import CelsiusNetwork
+
 api = CelsiusNetwork("PARTNER_TOKEN",
                      "USER_API_KEY")
+```
 ```
 
 ### Filtering transactions
