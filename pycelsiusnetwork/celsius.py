@@ -86,7 +86,7 @@ class CelsiusNetwork:
     def get_coin_balance(self,
                          coin: str,
                          raw: bool = False,
-                         return_type: str = 'in_coin',
+                         return_type: str = 'both',
                          silent: bool = None):
 
         coin = coin.upper()
