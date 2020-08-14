@@ -15,7 +15,7 @@ class CelsiusNetwork:
 
         if enviroment.lower() == 'production':
             self._base_url = "https://wallet-api.celsius.network"
-        elif enviroment.upper() == 'staging':
+        elif enviroment.lower() == 'staging':
             self._base_url = "https://wallet-api.staging.celsius.network"
         else:
             self._base_url = "https://wallet-api.celsius.network"
@@ -175,7 +175,7 @@ class CelsiusNetwork:
                         json = response.json()
                         result += json['record']
             except KeyError:
-                if (self.silent and silent) or silent:
+                if silent:
                     return None
                 else:
                     raise AbstractionFailure(json=json)
@@ -241,6 +241,7 @@ class CelsiusNetwork:
                             pagination['current'] + 1, pagination['pages'] + 1):
                         url = f"{self._base_url}" \
                               f"/wallet" \
+                              f"/{coin}" \
                               f"/transactions?page={next_page}&per_page=" \
                               f"{per_page}"
                         response = requests.request("GET", url,
