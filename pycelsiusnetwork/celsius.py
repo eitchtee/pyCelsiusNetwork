@@ -183,7 +183,8 @@ class CelsiusNetwork:
             if reverse:
                 result.reverse()
 
-            return filter_transactions(dt_from,
+            return filter_transactions(result,
+                                       dt_from,
                                        dt_to,
                                        amount_bigger_than,
                                        amount_lower_than,
@@ -191,7 +192,14 @@ class CelsiusNetwork:
                                        nature)
 
         else:
-            return get_key('record', json=json, silent=silent)
+            return filter_transactions(get_key(
+                                        'record', json=json, silent=silent),
+                                       dt_from,
+                                       dt_to,
+                                       amount_bigger_than,
+                                       amount_lower_than,
+                                       state,
+                                       nature)
 
     def get_transactions_for_coin(self,
                                   coin: str,
@@ -250,7 +258,7 @@ class CelsiusNetwork:
                         json = response.json()
                         result += json['record']
             except KeyError:
-                if (self.silent and silent) or silent:
+                if silent:
                     return None
                 else:
                     raise AbstractionFailure(json=json)
@@ -258,7 +266,8 @@ class CelsiusNetwork:
             if reverse:
                 result.reverse()
 
-            return filter_transactions(dt_from,
+            return filter_transactions(result,
+                                       dt_from,
                                        dt_to,
                                        amount_bigger_than,
                                        amount_lower_than,
@@ -266,7 +275,14 @@ class CelsiusNetwork:
                                        nature)
 
         else:
-            return get_key('record', json=json, silent=silent)
+            return filter_transactions(get_key(
+                                        'record', json=json, silent=silent),
+                                       dt_from,
+                                       dt_to,
+                                       amount_bigger_than,
+                                       amount_lower_than,
+                                       state,
+                                       nature)
 
     def get_deposit_adress_for_coin(self,
                                     coin: str,
@@ -360,4 +376,3 @@ class CelsiusNetwork:
             return json
         else:
             return get_key('currencies', json=json, silent=silent)
-
