@@ -67,11 +67,8 @@ Come back later.
 - [x] <small>``GET``</small> Transactions summary
 - [x] <small>``GET``</small> Transactions for coin
 - [x] <small>``GET``</small> Get deposit address
-- [ ] <small>``POST``</small> Withdraw
-- [ ] <small>``GET``</small> Get withdrawal transaction id
 - [x] <small>``GET``</small> Interest Rates
 - [x] <small>``GET``</small> KYC
-- [ ] <small>``POST``</small> KYC
 
 #### Abstraction Layer
 - [x] Option for returning raw JSON
