@@ -6,7 +6,7 @@ def get_key(*keys, json: dict, silent: bool):
     try:
         fetched_obj = json[keys[0]]
         if len(keys) > 1:
-            for i in range(1, len(keys) - 1):
+            for i in range(1, len(keys)):
                 fetched_obj = fetched_obj[keys[i]]
     except KeyError:
         if silent:
