@@ -2,16 +2,19 @@ from ..exceptions import AbstractionFailure
 from .time import convert_to_datetime
 
 
-def get_key(key: str, json: dict, silent: bool):
+def get_key(*keys, json: dict, silent: bool):
     try:
-        key = json[key]
+        fetched_obj = json[keys[0]]
+        if len(keys) > 1:
+            for i in range(1, len(keys) - 1):
+                fetched_obj = fetched_obj[keys[i]]
     except KeyError:
         if silent:
             return None
         else:
             raise AbstractionFailure(json=json)
     else:
-        return key
+        return fetched_obj
 
 
 def filter_json(lst,

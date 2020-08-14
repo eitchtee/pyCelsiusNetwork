@@ -52,7 +52,7 @@ class CelsiusNetwork:
         if raw:
             return json
         else:
-            rates = get_key(key='interestRates', json=json, silent=silent)
+            rates = get_key('interestRates', json=json, silent=silent)
             rates_list = [{'coin': x['coin'], 'rate': x['rate']} for x in rates]
             rates_dict = {item.pop("coin"): item['rate'] for item in rates_list}
             if coin:
@@ -81,7 +81,7 @@ class CelsiusNetwork:
         if raw:
             return json
         else:
-            return get_key(key='balance', json=json, silent=silent)
+            return get_key('balance', json=json, silent=silent)
 
     def get_coin_balance(self,
                          coin: str,
@@ -111,14 +111,14 @@ class CelsiusNetwork:
             return json
         else:
             if return_type == 'in_coin':
-                in_coin = get_key(key='amount', json=json, silent=silent)
+                in_coin = get_key('amount', json=json, silent=silent)
                 return in_coin
             elif return_type == 'in_usd':
-                in_usd = get_key(key='amount_in_usd', json=json, silent=silent)
+                in_usd = get_key('amount_in_usd', json=json, silent=silent)
                 return in_usd
             elif return_type == 'both':
-                in_coin = get_key(key='amount', json=json, silent=silent)
-                in_usd = get_key(key='amount_in_usd', json=json, silent=silent)
+                in_coin = get_key('amount', json=json, silent=silent)
+                in_usd = get_key('amount_in_usd', json=json, silent=silent)
                 return {'in_coin': in_coin,
                         'in_usd': in_usd}
 
@@ -191,7 +191,7 @@ class CelsiusNetwork:
                                nature)
 
         else:
-            return get_key(key='record', json=json, silent=silent)
+            return get_key('record', json=json, silent=silent)
 
     def get_transactions_for_coin(self,
                                   coin: str,
@@ -265,7 +265,7 @@ class CelsiusNetwork:
                                nature)
 
         else:
-            return get_key(key='record', json=json, silent=silent)
+            return get_key('record', json=json, silent=silent)
 
     def get_deposit_adress_for_coin(self,
                                     coin: str,
