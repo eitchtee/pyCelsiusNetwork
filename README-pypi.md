@@ -23,6 +23,15 @@ $ pip install pycelsiusnetwork
 
 ## Usage and Examples
 
+### Docs
+Additional documentation is provided through the ``__doc__`` attribute.
+
+```
+>> from pycelsiusnetwork import CelsiusNetwork
+
+>> print(CelsiusNetwork.get_deposit_adress_for_coin.__doc__)
+```
+
 ### Initialization
 ```python
 from pycelsiusnetwork import CelsiusNetwork
