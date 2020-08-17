@@ -1,4 +1,5 @@
 import setuptools
+import os
 
 with open("README-pypi.md", "r", encoding='utf-8') as fh:
     long_description = fh.read()
@@ -6,7 +7,7 @@ with open("README-pypi.md", "r", encoding='utf-8') as fh:
 setuptools.setup(
     name="pycelsiusnetwork",
     packages=['pycelsiusnetwork'],
-    version="0.3.0",
+    version=os.environ.get('VERSION', '0.0.0'),
     license='MIT',
     author="Herculino Trotta Neto",
     author_email="herculinotrotta@gmail.com",
