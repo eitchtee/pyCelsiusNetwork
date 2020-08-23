@@ -34,17 +34,17 @@ Additional documentation is provided through the ``__doc__`` attribute.
 
 ### Initialization
 ```python
-from pycelsiusnetwork import CelsiusNetwork
+from pycelsiusnetwork import CelsiusNetwork, Env
 
-api = CelsiusNetwork("PARTNER_TOKEN",
-                     "USER_API_KEY")
-```
+api = CelsiusNetwork(partner_token="PARTNER_TOKEN",
+                     api_key="USER_API_KEY",
+                     enviroment=Env.PRODUCTION)
 ```
 
 ### Filtering transactions
 You don't neet to set all filtering options, only the ones you want.
-> dt_from and dt_to also accepts datetime objects.
->
+> dt_from and dt_to also accepts datetime objects and other ISO compliant strings.
+
 ```python
 filtered_transactions = api.get_transactions(dt_from="2020-01-01",
                                              dt_to="2020-05-01",
